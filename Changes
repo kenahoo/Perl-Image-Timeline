@@ -1,5 +1,11 @@
 Revision history for Perl extension Image::Timeline.
 
+0.10  Wed Feb 25 22:28:12 CST 2004
+
+ - Images are now written uwing binmode() on the output filehandle,
+   which makes a difference on platforms like Win32. [Pa'll I'so'lfur
+   O'lason]
+
 0.09  Sun Feb 22 20:15:42 CST 2004
 
  - Added 'right_margin' parameter, which allows the user to define
