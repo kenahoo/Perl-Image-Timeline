@@ -23,9 +23,13 @@ sub new {
 	      legend_color => [0,0,0],
 	      text_color => [0,0,0],
 	      date_format => '',
+	      to_string => sub { $_[0] },
+	      right_margin => 0,
 	      %args
 	     };
 
+  # subtract right_margin to width to avoid cutting last legend
+  $self->{width} -= $self->{right_margin};
   return bless $self, $pkg;
 }
 
@@ -52,7 +56,7 @@ sub write_gif { my $s = shift; $s->write('gif', @_) }
 
 sub _create_image {
   my ($self, $w, $h) = @_;
-  my $image = GD::Image->new($w,$h);
+  my $image = GD::Image->new($w + $self->{right_margin},$h);
 
   # Allocate some colors
   foreach (qw(bg bar endcap legend text)) {
@@ -117,12 +121,12 @@ sub draw_legend {
   my $start_at = int($min/$step) * $step;
   for (my $i=$start_at; $i <= $max + $step; $i += $step) {
     $image->line($self->_convert($i), 2, $self->_convert($i), 8, $color);
-    my $label = $self->{date_format} ? $self->_UTC_to_string($i) : $i;
+    my $label = $self->{date_format} ? $self->_UTC_to_string($i) : $self->{to_string}->($i);
     $image->string($self->{font}, $self->_convert($i)+1, 4, $label, $color);
   }
   
   # Long top line
-  $image->line($self->_convert($start_at), 2, $self->_convert((int($max/$step)+1) * $step), 2, $color);
+  $image->line($self->_convert($start_at), 2, $self->_convert((int($max/$step)+1) * $step) + $self->{right_margin}, 2, $color);
 }
 
 sub _convert {
@@ -311,6 +315,18 @@ However, if you supply the C<date_format> parameter, the data will be
 assumed to be a Unix timestamp (similar to the output of the C<time()>
 function), and it will be passed to the C<Date::Format> C<time2str>
 function, using the C<date_format> parameter as the formatting string.
+
+=item to_string
+
+The function used to convert the numerical data describing and entry's
+start and end point can be defined using this parameter. This function is
+only used if the C<date_format> parameter is not defined and should take
+one argument, the numerical value.
+
+=item right_margin
+
+How many pixels should be left over the right margin so that the last
+legend isn't cut from the image.
 
 =back
 
