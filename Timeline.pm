@@ -36,19 +36,19 @@ sub add {
   $self->{data}{$label}{end}   = $end;
 }
 
-sub _write {
-  my ($self, $format, $filename) = @_;
+sub write {
+  my ($self, $format, $filename, @args) = @_;
 
   my $image = $self->draw;
 
   local *OUT;
   open OUT, ">$filename" or die "Can't create '$filename': $!";
-  print OUT $image->$format();
+  print OUT $image->$format(@args);
   close OUT;
 }
 
-sub write_png { my $s = shift; $s->_write('png', @_) }
-sub write_gif { my $s = shift; $s->_write('gif', @_) }
+sub write_png { my $s = shift; $s->write('png', @_) }
+sub write_gif { my $s = shift; $s->write('gif', @_) }
 
 sub _create_image {
   my ($self, $w, $h) = @_;
@@ -242,8 +242,9 @@ Image::Timeline - Create GIF or PNG timelines
 =head1 DESCRIPTION
 
 This module creates bar-format timelines using the GD.pm module.
-Depending on the version of GD you have, you can produce either GIF or
-PNG files.
+Timelines are automatically laid out so that their entries don't
+overlap each other.  Depending on the version of GD you have, you can
+produce several different file formats, including GIF or PNG files.
 
 See the file C<t/truth.gif> for example output.
 
@@ -256,17 +257,17 @@ affect how the timeline is created:
 
 =over 4
 
-=item * width
+=item width
 
 How many pixels wide the image should be.  Default is 900 pixels, for
 no good reason.
 
-=item * font
+=item font
 
 Which GD font should be used to label each entry in the timeline.
 Default is C<gdTinyFont>.
 
-=item * bar_stepsize
+=item bar_stepsize
 
 The "tick interval" on the timeline's legend at the top.  Default is
 50 (i.e. 50 years).  If the stepsize ends with the C<%> character, it
@@ -275,25 +276,25 @@ will be interpreted as a percentage of the total data width.
 Note that the stepsize is given in terms of the data space
 (i.e. years), not in terms of the image space (i.e. pixels).
 
-=item * vspacing
+=item vspacing
 
 How many pixels of vertical space should be left between entries.
 Default is 2.
 
-=item * hmargin
+=item hmargin
 
 How many pixels should be left at the far right and far left of the
 image.  Default is 3.
 
-=item * bg_color
+=item bg_color
 
-=item * bar_color
+=item bar_color
 
-=item * endcap_color
+=item endcap_color
 
-=item * legend_color
+=item legend_color
 
-=item * text_color
+=item text_color
 
 These parameters affect the colors of the image.  Each associated
 value should be a 3-element array reference, specifying RGB values
@@ -301,7 +302,7 @@ from 0 to 255.  For instance, the default value of C<bar_color> is
 pure red, specified as C<[255,0,0]>.  The defaults are reasonable, but
 not necessarily attractive.
 
-=item * date_format
+=item date_format
 
 By default, the numerical data describing an entry's start and end
 point are also used as the label for the legend at the top of the
@@ -335,6 +336,18 @@ A convenience method which writes the timeline to a file.  Because of
 some Unisys/Compuserve/GD patent issues that I don't want to get
 involved in, writing PNG output requires a version of GD newer than
 1.19, while writing GIF output requires GD version 1.19 or older.
+See the GD.pm documentation for more information on this issue.
+
+=head2 write(format, filename, [arguments])
+
+Writes the timeline in the specified format to the specified file.
+For example, C<< $t->write('png', 'foo.png') >> writes a PNG file to
+F<foo.png>.  The format can be any format supported by your version of
+GD, which may include C<png>, C<gif>, C<jpeg>, C<gd>, C<gd2>, and
+C<wbmp> in recent versions of GD.  Any extra arguments will be passed
+to the GD rendering method, which may be useful for methods like
+C<jpeg> or C<wbmp>.
+
 
 =head1 LIMITATIONS
 
@@ -352,17 +365,17 @@ here.
 
 =head1 AUTHOR
 
-Ken Williams, ken@forum.swarthmore.edu
+Ken Williams, ken@mathforum.org
 
 =head1 COPYRIGHT
 
-Copyright 2001 Ken Williams.  All rights reserved.
+Copyright 2001-2002 Ken Williams.  All rights reserved.
 
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-perl(1), GD(3)
+perl(1), GD(3), Date::Format(3)
 
 =cut
