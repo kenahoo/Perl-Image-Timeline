@@ -27,3 +27,6 @@ _$*
 core
 # CVS default ignores end
 .lwpcookies
+Build
+_build
+Image-*
