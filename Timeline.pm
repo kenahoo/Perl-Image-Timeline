@@ -47,6 +47,7 @@ sub write {
 
   local *OUT;
   open OUT, ">$filename" or die "Can't create '$filename': $!";
+  binmode(OUT);
   print OUT $image->$format(@args);
   close OUT;
 }
