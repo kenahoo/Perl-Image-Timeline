@@ -1,5 +1,11 @@
 Revision history for Perl extension Image::Timeline.
 
+0.08  Wed Jul  9 12:11:47 CDT 2003
+
+ - Apparently the "better way" from release 0.07 didn't work for
+   everybody, so there's yet *another* change in the testing for
+   it.
+
 0.07  Tue Jul  8 17:56:19 CDT 2003
 
  - Found a better way to test whether GD was compiled with support for
