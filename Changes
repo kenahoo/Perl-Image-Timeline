@@ -1,5 +1,12 @@
 Revision history for Perl extension Image::Timeline.
 
+0.06  Sat Dec 14 01:05:30 AEST 2002
+
+ - Skip the 'date_format.t' test if Date::Format isn't installed.
+
+ - Document the interface to write(), which allows rendering in any
+   format supported by GD.
+
 0.05  Fri Aug 24 11:15:00 BST 2001
   - MZSANFORD@cpan.org helped add simple date support via the 'date_format' parameter.
   
