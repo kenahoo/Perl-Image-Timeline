@@ -33,7 +33,7 @@ ok 1;  # Just say we got this far.
 
 ok $t->draw;
 
-my $format = GD::Image->new(1,1)->gif ? 'gif' : 'png';
+my $format = has_gif() ? 'gif' : 'png';
 ok &write_and_compare($t, 't/testimage_format', 't/truth_format', $format);
 
 __DATA__

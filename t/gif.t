@@ -6,7 +6,7 @@ use Image::Timeline;
 use Test;
 require "t/common.pl";
 
-if (GD::Image->new(1,1)->gif) {
+if (has_gif()) {
   plan tests => 6;
 } else {
   print "1..0\n";

@@ -1,4 +1,8 @@
 
+sub has_gif {
+  return GD::Image->can('gif') && GD::Image->new(1,1)->gif;
+}
+
 sub new_with_data {
   my $datafile = shift;
   my $t = new Image::Timeline(width => 600);
