@@ -1,6 +1,10 @@
 Revision history for Perl extension Image::Timeline.
 
+0.02  
+  - Added a real test for PNG output, comparing generated data to 
+    a sample output file.
+
 0.01  Thu May 31 22:40:04 2001
-	- original version; created by h2xs 1.1.1.4 with options
-		-XA -n Image::Timeline
+  - original version; created by h2xs 1.1.1.4 with options
+	-XA -n Image::Timeline
 
