@@ -1,0 +1,6 @@
+Revision history for Perl extension Image::Timeline.
+
+0.01  Thu May 31 22:40:04 2001
+	- original version; created by h2xs 1.1.1.4 with options
+		-XA -n Image::Timeline
+

@@ -1,0 +1,9 @@
+Changes
+MANIFEST
+Makefile.PL
+README
+Timeline.pm
+t/gif.t
+t/png.t
+t/testdata.txt
+t/truth.gif
