@@ -1,8 +1,11 @@
 ^MANIFEST\.
 ^Makefile$
-^blib/
+^blib
 ^pm_to_blib$
 CVS
 ~$
 ^t/testimage
 ^\.
+^Image-
+^_build
+^Build$

@@ -1,8 +1,9 @@
+Build.PL
 Changes
-MANIFEST
 Makefile.PL
+MANIFEST			This list of files
+META.yml
 README
-Timeline.pm
 t/common.pl
 t/date_format.t
 t/gif.t
@@ -12,3 +13,4 @@ t/truth.gif
 t/truth.png
 t/truth_format.gif
 t/truth_format.png
+Timeline.pm
