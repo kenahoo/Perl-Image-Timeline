@@ -1,5 +1,10 @@
 Revision history for Perl extension Image::Timeline.
 
+0.05  Fri Aug 24 11:15:00 BST 2001
+  - MZSANFORD@cpan.org helped add simple date support via the 'date_format' parameter.
+  
+  - 'bar_stepsize' can now be specified as a percentage of total data width
+
 0.04  Mon Jun 18 01:56:24 CDT 2001
   - Forgot to include a file necessary for the 'make test' installation step.
     Added to MANIFEST.

@@ -1,10 +1,12 @@
 Changes
-MANIFEST
 Makefile.PL
+MANIFEST
 README
-Timeline.pm
 t/gif.t
 t/png.t
 t/testdata.txt
 t/truth.gif
 t/truth.png
+t/non_year.t
+t/testdatedata.txt
+Timeline.pm

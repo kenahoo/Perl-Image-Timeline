@@ -1,14 +1,14 @@
 
 ######################### We start with some black magic to print on failure.
 
-BEGIN { $numtests = 6 }
-END {print "1..$numtests\nnot ok 1\n" unless $loaded;}
+END {print "1..1\nnot ok 1\n" unless $loaded;}
 
 use Image::Timeline;
+require "t/common.pl";
 $loaded = 1;
 
 if ('GD::Image'->can('gif')) {
-  print "1..$numtests\n";
+  print "1..6\n";
 } else {
   print "1..0\n";
   exit 0;
@@ -18,36 +18,13 @@ if ('GD::Image'->can('gif')) {
 
 ######################### End of black magic.
 
-my $t = new Image::Timeline(width => 600);
-&report_result($t);
-
-open DATA, 't/testdata.txt' or die "testdata.txt: $!";
-while (<DATA>) {
-  my @data = /(.*) \((\d+)-(\d+)\)/ or next;
-  $t->add(@data);
-}
+my $t = &new_with_data('t/testdata.txt');
 &report_result(1);  # Just say we got this far.
+&report_result($t);
 
 my $i = $t->draw();
 &report_result($i);
 
-my $outfile = 't/testimage.gif';
-$t->write_gif($outfile);
-&report_result(-e $outfile);
-
-# Compare files
-{
-  local $/;
-  my $created = do {local *F; open F, $outfile;      <F>};
-  my $truth   = do {local *F; open F, 't/truth.gif'; <F>};
-  &report_result($created eq $truth);
-}
-
-sub report_result {
-  my $bad = !shift;
-  use vars qw($TEST_NUM);
-  $TEST_NUM++;
-  print "not "x$bad, "ok $TEST_NUM\n";
-  
-  print $_[0] if ($bad and $ENV{TEST_VERBOSE});
-}
+my ($exists, $same) = &write_and_compare($t, 't/testimage', 't/truth');
+&report_result($exists);
+&report_result($same);

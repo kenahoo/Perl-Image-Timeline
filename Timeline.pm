@@ -3,8 +3,11 @@ package Image::Timeline;
 use strict;
 use GD;
 
+# Not a required module, but try to load at compile time
+BEGIN {eval "use Date::Format"}
+
 use vars qw($VERSION);
-$VERSION = 0.04;
+$VERSION = 0.05;
 
 sub new {
   my ($pkg, %args) = @_;
@@ -19,6 +22,7 @@ sub new {
 	      endcap_color => [0,155,0],
 	      legend_color => [0,0,0],
 	      text_color => [0,0,0],
+	      date_format => '',
 	      %args
 	     };
 
@@ -87,30 +91,37 @@ sub _create_channels {
 sub _minmax {
   # Find min & max dates
   my ($self) = @_;
+  return ($self->{min}, $self->{max}) if exists $self->{min};
+
   my ($min,$max) = map {$_->{start}, $_->{end}} (each %{$self->{channels}[0]})[1];
-  
   foreach my $channel (@{$self->{channels}}) {
     foreach my $entry (values %$channel) {
       if ($entry->{start} < $min) {$min = $entry->{start}}
       if ($entry->{end}   > $max) {$max = $entry->{end}}
     }
   }
-  ($self->{min}, $self->{max}) = ($min, $max);
-  return ($min,$max);
+  return ($self->{min}, $self->{max}) = ($min, $max);
 }
 
 sub draw_legend {
   # Draw the top legend bar
   my ($self, $image) = @_;
-  my $step = $self->{bar_stepsize}; # For convenience
+  my ($min, $max) = $self->_minmax;
   my $color = $self->{colors}{legend};
-  my ($min,$max) = ($self->{min}, $self->{max});
+  
+  my $step = $self->{bar_stepsize}; # For convenience
+  if ($step =~ /^(\d+)%$/) { # Convert from percentage
+    $step = ($max - $min) * $1 / 100;
+  }
 
   my $start_at = int($min/$step) * $step;
   for (my $i=$start_at; $i <= $max + $step; $i += $step) {
     $image->line($self->_convert($i), 2, $self->_convert($i), 8, $color);
-    $image->string($self->{font}, $self->_convert($i)+1, 4, $i, $color);
+    my $label = $self->{date_format} ? $self->_UTC_to_string($i) : $i;
+    $image->string($self->{font}, $self->_convert($i)+1, 4, $label, $color);
   }
+  
+  # Long top line
   $image->line($self->_convert($start_at), 2, $self->_convert((int($max/$step)+1) * $step), 2, $color);
 }
 
@@ -164,7 +175,6 @@ sub draw {
   my ($self) = @_;
   
   $self->_create_channels;
-  $self->_minmax;
 
   # Add 2 to leave room for header
   my $fheight = $self->{font}->height;
@@ -198,6 +208,12 @@ sub _add_to_channel {
   }
 }
 
+sub _UTC_to_string {
+  my ($self,$UTC) = @_;
+  
+  require Date::Format;
+  return  Date::Format::time2str($self->{date_format}, $UTC);
+}
 
 1;
 __END__
@@ -253,7 +269,11 @@ Default is C<gdTinyFont>.
 =item * bar_stepsize
 
 The "tick interval" on the timeline's legend at the top.  Default is
-50 (i.e. 50 years).
+50 (i.e. 50 years).  If the stepsize ends with the C<%> character, it
+will be interpreted as a percentage of the total data width.
+
+Note that the stepsize is given in terms of the data space
+(i.e. years), not in terms of the image space (i.e. pixels).
 
 =item * vspacing
 
@@ -280,6 +300,16 @@ value should be a 3-element array reference, specifying RGB values
 from 0 to 255.  For instance, the default value of C<bar_color> is
 pure red, specified as C<[255,0,0]>.  The defaults are reasonable, but
 not necessarily attractive.
+
+=item * date_format
+
+By default, the numerical data describing an entry's start and end
+point are also used as the label for the legend at the top of the
+timeline.  Typically this means that the data represent years.
+However, if you supply the C<date_format> parameter, the data will be
+assumed to be a Unix timestamp (similar to the output of the C<time()>
+function), and it will be passed to the C<Date::Format> C<time2str>
+function, using the C<date_format> parameter as the formatting string.
 
 =back
 
