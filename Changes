@@ -1,6 +1,14 @@
 Revision history for Perl extension Image::Timeline.
 
-0.02  
+0.04  Mon Jun 18 01:56:24 CDT 2001
+  - Forgot to include a file necessary for the 'make test' installation step.
+    Added to MANIFEST.
+
+0.03  Mon Jun 11 10:59:16 CDT 2001
+  - Fixed a stray backslash in a string constant, which caused an 
+    incompatibility with perl 5.7.1.
+
+0.02  Jun  5 17:10 2001
   - Added a real test for PNG output, comparing generated data to 
     a sample output file.
 

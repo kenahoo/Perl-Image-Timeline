@@ -4,7 +4,7 @@ use strict;
 use GD;
 
 use vars qw($VERSION);
-$VERSION = 0.02;
+$VERSION = 0.04;
 
 sub new {
   my ($pkg, %args) = @_;
@@ -52,7 +52,7 @@ sub _create_image {
 
   # Allocate some colors
   foreach (qw(bg bar endcap legend text)) {
-    $self->{colors}{$_} = $image->colorAllocate(@{$self->{"$_\_color"}});
+    $self->{colors}{$_} = $image->colorAllocate(@{$self->{"${_}_color"}});
   }
   $image->fill(0,0,$self->{colors}{bg});
 
