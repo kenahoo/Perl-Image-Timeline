@@ -1,12 +1,11 @@
 
 ######################### We start with some black magic to print on failure.
 
-END {print "1..1\nnot ok 1\n" unless $loaded;}
-
 $| = 1;
+use strict;
 use Image::Timeline;
+use Test;
 require "t/common.pl";
-$loaded = 1;
 
 eval "use Date::Format";
 if ($@) {
@@ -14,9 +13,9 @@ if ($@) {
   exit;
 }
 
-print "1..5\n";
+plan tests => 5;
 
-&report_result(1);
+ok 1;
 
 ######################### End of black magic.
 
@@ -24,17 +23,18 @@ my $t = new Image::Timeline(width => 600,
 			    date_format => '%Y-%m-%d',
 			    bar_stepsize => '40%',
 			   );
-&report_result($t);
+ok $t;
 
 while (<DATA>) {
   my @data = /(.*) \((\d+)-(\d+)\)/ or next;
   $t->add(@data);
 }
-&report_result(1);  # Just say we got this far.
+ok 1;  # Just say we got this far.
 
-&report_result($t->draw());
+ok $t->draw;
 
-&report_result( &write_and_compare($t, 't/testimage_format', 't/truth_format') );
+my $format = GD::Image->can('gif') ? 'gif' : 'png';
+ok &write_and_compare($t, 't/testimage_format', 't/truth_format', $format);
 
 __DATA__
 PersonA (306764700-946684800)
