@@ -7,7 +7,7 @@ use GD;
 BEGIN {eval "use Date::Format"}
 
 use vars qw($VERSION);
-$VERSION = 0.07;
+$VERSION = 0.08;
 
 sub new {
   my ($pkg, %args) = @_;
