@@ -1,14 +1,13 @@
 
 ######################### We start with some black magic to print on failure.
 
-BEGIN { $numtests = 5 }
-END {print "1..$numtests\nnot ok 1\n" unless $loaded;}
+END {print "1..1\nnot ok 1\n" unless $loaded;}
 
 use Image::Timeline;
 $loaded = 1;
 
 if ('GD::Image'->can('png')) {
-  print "1..$numtests\n";
+  print "1..6\n";
 } else {
   print "1..0\n";
   exit 0;
@@ -36,14 +35,12 @@ $t->write_png($outfile);
 &report_result(-e $outfile);
 
 # Compare files
-# xxx - skipping, since I haven't built JPG support on my system yet,
-# and thus don't have the 'truth.jpg' file built.
-#{
-#  local $/;
-#  my $created = do {local *F; open F, $outfile;      <F>};
-#  my $truth   = do {local *F; open F, 't/truth.png'; <F>};
-#  &report_result($created eq $truth);
-#}
+{
+  local $/;
+  my $created = do {local *F; open F, $outfile;      <F>};
+  my $truth   = do {local *F; open F, 't/truth.png'; <F>};
+  &report_result($created eq $truth);
+}
 
 sub report_result {
   my $bad = !shift;
