@@ -8,6 +8,12 @@ use Image::Timeline;
 require "t/common.pl";
 $loaded = 1;
 
+eval "use Date::Format";
+if ($@) {
+  print "1..0 # Skipped: Date::Format is not installed\n";
+  exit;
+}
+
 print "1..5\n";
 
 &report_result(1);
