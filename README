@@ -1,7 +1,9 @@
 NAME
+
     Image::Timeline - Create GIF or PNG timelines
 
 SYNOPSIS
+
       use Image::Timeline;
       my $t = new Image::Timeline(width => 400);
       $t->add('J.S. Bach', 1685, 1750);
@@ -13,97 +15,144 @@ SYNOPSIS
       $t->write_gif('composers.gif');
        # For newer versions of GD:
       $t->write_png('composers.png');
-  
+      
       # Get the GD object
       my $img = $t->draw;
 
 DESCRIPTION
-    This module creates bar-format timelines using the GD.pm module.
-    Depending on the version of GD you have, you can produce either GIF or
-    PNG files.
 
-    See the file `t/truth.gif' for example output.
+    This module creates bar-format timelines using the GD.pm module.
+    Timelines are automatically laid out so that their entries don't
+    overlap each other. Depending on the version of GD you have, you can
+    produce several different file formats, including GIF or PNG files.
+
+    See the file t/truth.gif for example output.
 
 METHODS
-  new()
+
+ new()
 
     Creates a new timeline object. Accepts several named parameters that
     affect how the timeline is created:
 
-    * width
-        How many pixels wide the image should be. Default is 900 pixels, for
-        no good reason.
+    width
 
-    * font
-        Which GD font should be used to label each entry in the timeline.
-        Default is `gdTinyFont'.
+      How many pixels wide the image should be. Default is 900 pixels, for
+      no good reason.
 
-    * bar_stepsize
-        The "tick interval" on the timeline's legend at the top. Default is
-        50 (i.e. 50 years).
+    font
 
-    * vspacing
-        How many pixels of vertical space should be left between entries.
-        Default is 2.
+      Which GD font should be used to label each entry in the timeline.
+      Default is gdTinyFont.
 
-    * hmargin
-        How many pixels should be left at the far right and far left of the
-        image. Default is 3.
+    bar_stepsize
 
-    * bg_color
-    * bar_color
-    * endcap_color
-    * legend_color
-    * text_color
-        These parameters affect the colors of the image. Each associated
-        value should be a 3-element array reference, specifying RGB values
-        from 0 to 255. For instance, the default value of `bar_color' is
-        pure red, specified as `[255,0,0]'. The defaults are reasonable, but
-        not necessarily attractive.
+      The "tick interval" on the timeline's legend at the top. Default is
+      50 (i.e. 50 years). If the stepsize ends with the % character, it
+      will be interpreted as a percentage of the total data width.
 
-  add(label, start, end)
+      Note that the stepsize is given in terms of the data space (i.e.
+      years), not in terms of the image space (i.e. pixels).
+
+    vspacing
+
+      How many pixels of vertical space should be left between entries.
+      Default is 2.
+
+    hmargin
+
+      How many pixels should be left at the far right and far left of the
+      image. Default is 3.
+
+    bg_color
+
+    bar_color
+
+    endcap_color
+
+    legend_color
+
+    text_color
+
+      These parameters affect the colors of the image. Each associated
+      value should be a 3-element array reference, specifying RGB values
+      from 0 to 255. For instance, the default value of bar_color is pure
+      red, specified as [255,0,0]. The defaults are reasonable, but not
+      necessarily attractive.
+
+    date_format
+
+      By default, the numerical data describing an entry's start and end
+      point are also used as the label for the legend at the top of the
+      timeline. Typically this means that the data represent years.
+      However, if you supply the date_format parameter, the data will be
+      assumed to be a Unix timestamp (similar to the output of the time()
+      function), and it will be passed to the Date::Format time2str
+      function, using the date_format parameter as the formatting string.
+
+    to_string
+
+      The function used to convert the numerical data describing and
+      entry's start and end point can be defined using this parameter. This
+      function is only used if the date_format parameter is not defined and
+      should take one argument, the numerical value.
+
+    right_margin
+
+      How many pixels should be left over the right margin so that the last
+      legend isn't cut from the image.
+
+ add(label, start, end)
 
     Adds a new entry to the timeline. Supply a label that you want to
     include in the image, the starting date, and the ending date.
 
-  draw()
+ draw()
 
-    Creates the `GD' object and returns it. This method is where all the
-    real work is done - the code must figure out things like how to squeeze
-    the entries most compactly but avoid collisions between bars, when to
-    draw labels above their bars and when below (again, to avoid collisions
+    Creates the GD object and returns it. This method is where all the real
+    work is done - the code must figure out things like how to squeeze the
+    entries most compactly but avoid collisions between bars, when to draw
+    labels above their bars and when below (again, to avoid collisions
     between labels), the image's height (a function of how many concurrent
     entries it contains), and so on.
 
-  write_png(filename)
+ write_png(filename)
 
-  write_gif(filename)
+ write_gif(filename)
 
     A convenience method which writes the timeline to a file. Because of
     some Unisys/Compuserve/GD patent issues that I don't want to get
     involved in, writing PNG output requires a version of GD newer than
-    1.19, while writing GIF output requires GD version 1.19 or older.
+    1.19, while writing GIF output requires GD version 1.19 or older. See
+    the GD.pm documentation for more information on this issue.
+
+ write(format, filename, [arguments])
+
+    Writes the timeline in the specified format to the specified file. For
+    example, $t->write('png', 'foo.png') writes a PNG file to foo.png. The
+    format can be any format supported by your version of GD, which may
+    include png, gif, jpeg, gd, gd2, and wbmp in recent versions of GD. Any
+    extra arguments will be passed to the GD rendering method, which may be
+    useful for methods like jpeg or wbmp.
 
 LIMITATIONS
+
     Currently all dates/times are specified as integers, which are meant to
     represent years. Finer granularity (time of day) isn't supported yet,
     but it probably could be if it's desired (or someone gives me a patch).
 
-    Doesn't yet fully test the PNG capabilities during 'make test'. This is
-    just because I haven't yet found time to build all the necessary PNG
-    libraries on my system, so I haven't gotten the benchmark image built.
-    Please let me know whether this works correctly, and maybe even send me
-    the 't/testdata.png' file created so I can include it here.
-
 AUTHOR
-    Ken Williams, ken@forum.swarthmore.edu
+
+    Ken Williams, kwilliams@cpan.org
 
 COPYRIGHT
-    Copyright 2001 Ken Williams. All rights reserved.
+
+    Copyright 2001-2021 Ken Williams. All rights reserved.
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
 
 SEE ALSO
-    perl(1), GD(3)
+
+    perl(1), GD(3), Date::Format(3)
 

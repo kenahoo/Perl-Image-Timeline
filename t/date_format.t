@@ -4,8 +4,9 @@
 $| = 1;
 use strict;
 use Image::Timeline;
-use Test;
-require "t/common.pl";
+use Test::More;
+use lib qw(t);
+require "common.pl";
 
 eval "use Date::Format";
 if ($@) {
@@ -34,7 +35,7 @@ ok 1;  # Just say we got this far.
 ok $t->draw;
 
 my $format = has_gif() ? 'gif' : 'png';
-ok &write_and_compare($t, 't/testimage_format', 't/truth_format', $format);
+write_and_compare($t, 't/testimage_format', 't/truth_format', $format);
 
 __DATA__
 PersonA (306764700-946684800)

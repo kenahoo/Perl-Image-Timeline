@@ -1,3 +1,5 @@
+use strict;
+use Test::More;
 
 sub has_gif {
   return GD::Image->can('gif') && GD::Image->new(1,1)->gif;
@@ -23,7 +25,9 @@ sub write_and_compare {
   my $outfile = "$name.$suffix";
   my $method = "write_$suffix";
   $t->$method($outfile);
-  return (-e $outfile, &files_identical($outfile, "$truthname.$suffix"));
+
+  ok(-e $outfile);
+  files_identical($outfile, "$truthname.$suffix");
 }
 
 sub files_identical {
@@ -31,7 +35,7 @@ sub files_identical {
   local $/;
   my $data_one = do {local *F; open F, $one or die "$one: $!"; <F>};
   my $data_two = do {local *F; open F, $two or die "$two: $!"; <F>};
-  return $data_one eq $data_two;
+  is($data_one, $data_two);
 }
 
 1;

@@ -373,20 +373,13 @@ to represent years.  Finer granularity (time of day) isn't supported
 yet, but it probably could be if it's desired (or someone gives me a
 patch).
 
-Doesn't yet fully test the PNG capabilities during 'make test'.  This
-is just because I haven't yet found time to build all the necessary
-PNG libraries on my system, so I haven't gotten the benchmark image
-built.  Please let me know whether this works correctly, and maybe
-even send me the 't/testdata.png' file created so I can include it
-here.
-
 =head1 AUTHOR
 
-Ken Williams, ken@mathforum.org
+Ken Williams, kwilliams@cpan.org
 
 =head1 COPYRIGHT
 
-Copyright 2001-2002 Ken Williams.  All rights reserved.
+Copyright 2001-2021 Ken Williams.  All rights reserved.
 
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

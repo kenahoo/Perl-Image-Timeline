@@ -34,3 +34,4 @@ MYMETA*
 blib
 t/testimage.gif
 t/testimage_format.gif
+.idea

@@ -1,3 +1,4 @@
+use strict;
 use Module::Build;
 
 my $build = Module::Build->new
@@ -13,9 +14,13 @@ my $build = Module::Build->new
 		  'Date::Format' => 0,
 		 },
    build_requires => {
-		      'Test' => 0,
+		      'Test::More' => 0,
 		     },
+   configure_requires => {
+	   'Module::Build' => 0,
+   },
    create_makefile_pl => 'traditional',
+	  create_readme => 1,
    add_to_cleanup => [qw(t/testimage.gif t/testimage.png t/testimage_format.gif t/testimage_format.png)],
    sign => 1,
   );

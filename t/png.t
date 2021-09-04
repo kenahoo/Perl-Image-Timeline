@@ -1,8 +1,9 @@
 
 use strict;
 use Image::Timeline;
-use Test;
-require "t/common.pl";
+use Test::More;
+use lib qw(t);
+require "common.pl";
 
 if ('GD::Image'->can('png')) {
   plan tests => 6;
@@ -22,6 +23,4 @@ ok $t;
 my $i = $t->draw();
 ok $i;
 
-my ($exists, $same) = &write_and_compare($t, 't/testimage', 't/truth', 'png');
-ok $exists;
-ok $same;
+write_and_compare($t, 't/testimage', 't/truth', 'png');

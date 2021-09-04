@@ -1,18 +1,27 @@
---- #YAML:1.0
-name: Image-Timeline
-version: 0.11
+---
+abstract: 'Create GIF or PNG timelines'
 author:
-  - Ken Williams, ken@mathforum.org
-abstract: Create GIF or PNG timelines
-license: perl
-requires:
-  GD: 0
-recommends:
-  Date::Format: 0
+  - 'Ken Williams, kwilliams@cpan.org'
 build_requires:
-  Test: 0
+  Test::More: '0'
+configure_requires:
+  Module::Build: '0'
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4231, CPAN::Meta::Converter version 2.150010'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: '1.4'
+name: Image-Timeline
 provides:
   Image::Timeline:
     file: Timeline.pm
-    version: 0.11
-generated_by: Module::Build version 0.23
+    version: '0.11'
+recommends:
+  Date::Format: '0'
+requires:
+  GD: '0'
+resources:
+  license: http://dev.perl.org/licenses/
+version: '0.11'
+x_serialization_backend: 'CPAN::Meta::YAML version 0.018'
